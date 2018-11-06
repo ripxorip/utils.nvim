@@ -23,3 +23,7 @@ class UtilsPlug(object):
         self.nvim.command('normal! "*y')
         self.nvim.command('normal! \'m')
 
+    @neovim.command("Rgg", range='', nargs='*', sync=True)
+    def rgg(self, args, range):
+        """ Yanks the entire buffer to clipboard """
+        self.nvim.command('Rg <cword> --no-ignore --type c')
