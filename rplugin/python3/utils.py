@@ -64,12 +64,12 @@ class UtilsPlug(object):
         self.nvim.command('setlocal filetype=utils_log')
         self.nvim.current.buffer.append(self.logstr)
 
-    @neovim.command("UtilsFindReplace", range='', nargs='*', sync=True)
+    @neovim.command("UtilsFindReplaceRecursive", range='', nargs='*', sync=True)
     # TODO respect .gitignore etc.
-    def frc(self, args, range):
+    def frcr(self, args, range):
         currentSymbol = self.nvim.eval("expand('<cword>')")
         # Prompt what to replace this symbol with
-        resp = python_input(self.nvim, message="Replace " + currentSymbol + " with in cwd?")
+        resp = python_input(self.nvim, message="Replace " + currentSymbol + " with in recursive cwd?")
         if resp == "":
             return
         cmd = "find . -type f ! -name \"*.o\" ! -name \"*.git\" -print0 | xargs -0 sed -i '' -e 's/%s/%s/g'" % (currentSymbol, resp)
@@ -78,4 +78,28 @@ class UtilsPlug(object):
         self.nvim.command('set noconfirm')
         self.nvim.command('bufdo e')
         self.nvim.command('set confirm')
+
+    @neovim.command("UtilsFindReplaceInFile", range='', nargs='*', sync=True)
+    # TODO respect .gitignore etc.
+    def frcf(self, args, range):
+        currentSymbol = self.nvim.eval("expand('<cword>')")
+        # Prompt what to replace this symbol with
+        resp = python_input(self.nvim, message="Replace " + currentSymbol + " with in file?")
+        if resp == "":
+            return
+        cmd = "%%s/%s/%s/g" % (currentSymbol, resp)
+        self.log(cmd)
+        self.nvim.command(cmd)
+
+    @neovim.command("UtilsFindReplaceInFileIncremental", range='', nargs='*', sync=True)
+    # TODO respect .gitignore etc.
+    def frcfi(self, args, range):
+        currentSymbol = self.nvim.eval("expand('<cword>')")
+        # Prompt what to replace this symbol with
+        resp = python_input(self.nvim, message="Replace " + currentSymbol + " with in file inc?")
+        if resp == "":
+            return
+        cmd = ",$s/%s/%s/g" % (currentSymbol, resp)
+        self.log(cmd)
+        self.nvim.command(cmd)
 
