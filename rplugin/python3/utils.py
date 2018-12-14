@@ -103,3 +103,11 @@ class UtilsPlug(object):
         self.log(cmd)
         self.nvim.command(cmd)
 
+    @neovim.command("GotoFileFromGDB", range='', nargs='*', sync=True)
+    # TODO respect .gitignore etc.
+    def gtffgdb(self, args, range):
+        if(os.path.isfile('curr_gdb_line')):
+            with open('curr_gdb_line', 'r') as f:
+                l = f.read().rstrip()
+            self.nvim.command('e ' + l)
+
