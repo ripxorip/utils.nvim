@@ -104,10 +104,21 @@ class UtilsPlug(object):
         self.nvim.command(cmd)
 
     @neovim.command("GotoFileFromGDB", range='', nargs='*', sync=True)
-    # TODO respect .gitignore etc.
     def gtffgdb(self, args, range):
         if(os.path.isfile('curr_gdb_line')):
             with open('curr_gdb_line', 'r') as f:
                 l = f.read().rstrip()
             self.nvim.command('e ' + l)
+
+    @neovim.command("YankLineAndFileToTmux", range='', nargs='*', sync=True)
+    def ylaftt(self, args, range):
+        currentLine = self.nvim.command_output('echo line(".")')
+        currentFile = self.nvim.command_output('echo @%')
+        bpStr = 'b ' + currentFile + ':' + str(currentLine)
+        self.nvim.command('e tmp')
+        self.nvim.command('setlocal buftype=nofile')
+        self.nvim.current.line = bpStr
+        self.log(self.nvim.current.line)
+        self.nvim.command('Tyank')
+        self.nvim.command('bp')
 
