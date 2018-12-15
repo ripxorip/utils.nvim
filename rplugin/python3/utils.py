@@ -113,7 +113,7 @@ class UtilsPlug(object):
     @neovim.command("YankLineAndFileToTmux", range='', nargs='*', sync=True)
     def ylaftt(self, args, range):
         currentLine = self.nvim.command_output('echo line(".")')
-        currentFile = self.nvim.command_output('echo @%')
+        currentFile = self.nvim.command_output('echo expand("%:p")')
         bpStr = 'b ' + currentFile + ':' + str(currentLine)
         self.nvim.command('e tmp')
         self.nvim.command('setlocal buftype=nofile')
