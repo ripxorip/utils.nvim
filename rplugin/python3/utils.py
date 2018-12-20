@@ -110,6 +110,10 @@ class UtilsPlug(object):
                 l = f.read().rstrip()
             self.nvim.command('e ' + l)
 
+    @neovim.command("HighlightCurrentSymbol", range='', nargs='*', sync=True)
+    def hcs(self, args, range):
+        self.nvim.command("let @/=expand('<cword>')")
+
     @neovim.command("YankLineAndFileToTmux", range='', nargs='*', sync=True)
     def ylaftt(self, args, range):
         currentLine = self.nvim.command_output('echo line(".")')
