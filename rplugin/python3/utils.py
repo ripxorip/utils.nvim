@@ -110,8 +110,13 @@ class UtilsPlug(object):
                 l = f.read().rstrip()
             self.nvim.command('e ' + l)
 
+    @neovim.command("ToggleHLForUtil", range='', nargs='*', sync=True)
+    def thfu(self, args, range):
+        self.nvim.command("set hlsearch")
+
     @neovim.command("HighlightCurrentSymbol", range='', nargs='*', sync=True)
     def hcs(self, args, range):
+        self.nvim.command("ToggleHLForUtil")
         self.nvim.command("let @/=expand('<cword>')")
 
     @neovim.command("YankLineAndFileToTmux", range='', nargs='*', sync=True)
