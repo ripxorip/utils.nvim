@@ -57,6 +57,11 @@ class UtilsPlug(object):
         pattern = '--no-ignore --type cpp'
         self.doRg(pattern, args)
 
+    @neovim.command("Rgi", range='', nargs='*', sync=True)
+    def rgcpp(self, args, range):
+        pattern = '--no-ignore'
+        self.doRg(pattern, args)
+
     @neovim.command("UtilsShowLog", range='', nargs='*', sync=True)
     def usl(self, args, range):
         self.nvim.command('e utils_log')
