@@ -84,6 +84,14 @@ class UtilsPlug(object):
         self.nvim.command('bufdo e')
         self.nvim.command('set confirm')
 
+    @neovim.command("YankLineAndFileToClipboard", range='', nargs='*', sync=True)
+    def ylaftc(self, args, range):
+        currentLine = self.nvim.command_output('echo line(".")')
+        currentFile = self.nvim.command_output('echo expand("%:p")')
+        linestr = currentFile+':'+currentLine
+        self.log(linestr)
+        self.nvim.command('let @+ = "%s"' % linestr)
+
     @neovim.command("UtilsFindReplaceInFile", range='', nargs='*', sync=True)
     # TODO respect .gitignore etc.
     def frcf(self, args, range):
